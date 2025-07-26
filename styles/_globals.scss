@@ -1,0 +1,113 @@
+@use './helpers' as *;
+
+html {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+}
+
+body {
+  @include fluid-text(16,14);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-family-base);
+  background-color: var(--color-purple);
+  color: var(--color-white);
+}
+
+main {
+  flex-grow: 1;
+}
+
+
+
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6 {
+  color: var(--color-black);
+}
+
+h2, .h2 {
+  font-weight: 700;
+}
+
+h3, .h3,
+p, .p {
+  font-weight: 300;
+}
+
+h1, .h1 {
+  @include fluid-text(36,20);
+}
+
+h2, .h2 {
+  @include fluid-text(30,18);
+}
+
+h3, .h3 {
+  @include fluid-text(24,16);
+}
+
+a,
+button,
+label,
+textarea,
+input,
+select,
+svg * {
+  transition-duration: var(--transition-duration);
+}
+
+a {
+  color: inherit;
+
+  @include hover {
+    color: var(--color-red);
+  }
+
+
+  &[class] {
+    text-decoration: none;
+  }
+}
+
+button {
+  color: inherit;
+
+  &:focus-visible {
+    color: var(--color-white);
+    background-color: var(--color-green-blue);
+  }
+
+  @include hover {
+    color: var(--color-white);
+    background-color: var(--color-green-blue);
+    transition-duration: 0.3s;
+  }
+
+
+  &[class] {
+    text-decoration: none;
+  }
+}
+
+
+
+:focus-visible {
+  color: var(--color-red);
+  transition-duration: 0s !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+}
+
+
+
+

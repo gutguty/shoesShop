@@ -1,0 +1,48 @@
+@use '../helpers' as *;
+
+.team {
+  position: relative;
+  overflow: hidden;
+  width: 100vw;
+  &::before {
+    content: '';
+    position: absolute;
+    background-image: url("../../icons/team_circle.svg");
+    width: 25vw;
+    height: 25vw;
+    background-repeat: no-repeat;
+    background-size: contain;
+    z-index: -1;
+    top: 0;
+    right: 0;
+  }
+
+  &__information {
+    padding-block: fluid(60,20);
+
+    &-title {
+      color: var(--color-white);
+      margin-bottom: fluid(40,20);
+    }
+
+    &-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: rem(30);
+      @include mobile {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    &-card {
+      display: flex;
+      flex-direction: column;
+      gap: rem(20);
+    }
+
+    &-card-name {
+      @include fluid-text(24,16);
+      font-weight: 600;
+    }
+  }
+}

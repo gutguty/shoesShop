@@ -1,0 +1,114 @@
+@use '../helpers' as *;
+
+.end {
+  background-color: var(--color-white);
+
+  &__information {
+    display: flex;
+    align-items: center;
+    gap: rem(60);
+    padding-block: fluid(60,30) fluid(82,30);
+    @include laptop {
+      justify-content: center;
+    }
+
+    &-form {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      width: fluid(380,240);
+      min-height: fluid(400,200);
+      background-color: var(--color-purple);
+      align-items: center;
+      padding: fluid(40,20) rem(20);
+      justify-content: center
+    }
+
+    &-title {
+      color: var(--color-white);
+    }
+
+    &-description {
+      max-width: rem(260);
+      margin-block: rem(20) rem(35);
+    }
+
+    &-input {
+      width: fluid(338,218);
+      height: fluid(63,48);
+      color: var(--color-black);
+      margin-bottom: rem(10);
+      border: none;
+      border-radius: rem(4);
+
+      &::placeholder {
+        color: var(--color-gray);
+        opacity: 1;
+      }
+    }
+    &-button {
+      width: fluid(338,218);
+      height: fluid(63,48);
+      &:focus-visible {
+        background-color: var(--color-hover-red);
+      }
+      &:hover {
+        background-color: var(--color-hover-red);
+      }
+    }
+
+    &-images {
+      @include laptop {
+        display: none;
+        opacity: 0;
+      }
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: rem(20);
+    }
+  }
+  &__gallery {
+    &-list {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: rem(18);
+      list-style: none;
+    }
+    &-item {
+      &:first-child {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      &:nth-child(2) {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      &:nth-child(3) {
+        grid-column: 2 / span 2;
+        grid-row: 1 / span 2;
+      }
+      &:nth-child(4) {
+        grid-column: 4;
+        grid-row: 1;
+      }
+      &:last-child {
+        grid-column: 4;
+        grid-row: 2;
+      }
+    }
+    &-figure {
+      margin: 0;
+      height: 100%;
+    }
+    &-image {
+      width: 100%;
+      object-fit: cover;
+      .end__gallery-item:nth-child(3) & {
+        height: 100%;
+      }
+    }
+  }
+}

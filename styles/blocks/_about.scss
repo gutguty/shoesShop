@@ -1,0 +1,85 @@
+@use '../helpers' as *;
+
+.about {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    background-image: url(../../icons/about_circles.svg);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 45%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    z-index: -1;
+  }
+
+  &__body {
+    display: flex;
+    align-items: center;
+    gap: rem(50);
+    @include mobile {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  &__information {
+    display: flex;
+    flex-direction: column;
+    gap: rem(15);
+
+
+    max-width: rem(450);
+    max-height: rem(450);
+
+    @include mobile {
+      align-self: center;
+      justify-self: center;
+      text-align: center;
+      padding-block: rem(20);
+    }
+
+
+    &-title {
+      color: var(--color-white)
+
+    }
+
+    &-text {
+      max-width: rem(380);
+
+    }
+
+    &-signature {
+      display: flex;
+      align-items: center;
+      gap: rem(20);
+      font-weight: 600;
+      place-self: end;
+
+      &::before {
+        content: "";
+        display: inline-block;
+        width: rem(30);
+        height: rem(2);
+        background-color: var(--color-white)
+      }
+    }
+  }
+
+  &__image {
+    @include mobile {
+      display: none;
+      opacity: 0;
+    }
+
+    &-image {
+      clip-path: polygon(30% 0%, 100% 0%, 70% 100%, 0% 100%);
+    }
+  }
+
+}

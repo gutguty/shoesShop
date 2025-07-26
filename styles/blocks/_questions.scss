@@ -1,0 +1,80 @@
+@use "../helpers" as *;
+
+.questions {
+  background-color: var(--color-white);
+
+  &__information {
+    padding-block: fluid(60,30);
+
+    &-header {
+      margin-bottom: rem(40);
+    }
+
+    &-list {
+      max-width: rem(880);
+      margin: 0 auto;
+    }
+
+    &-accordion {
+      border-bottom: rem(1) solid var(--color-black);
+      padding: rem(20) rem(20);
+      transition: all 0.3s ease;
+
+      &:first-child {
+        border-top: rem(1) solid var(--color-black);
+      }
+
+      &[open] {
+        .questions__information-accordion-indicator {
+          transform: rotate(45deg);
+        }
+      }
+
+      &-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      &-title {
+        font-weight: 500;
+
+      }
+
+      &-indicator {
+        position: relative;
+        width: rem(25);
+        height: rem(25);
+        transition: transform 0.3s ease;
+
+        &::before,
+        &::after {
+          content: '';
+          position: absolute;
+          background-color: var(--color-black);
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        &::before {
+          width: 100%;
+          height: rem(2);
+        }
+
+        &::after {
+          width: rem(2);
+          height: 100%;
+        }
+      }
+
+      &-body {
+        color: var(--color-gray-dark);
+        opacity: 0.5;
+        margin-top: rem(20);
+        margin-right: rem(40);
+      }
+    }
+  }
+}

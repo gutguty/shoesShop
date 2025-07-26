@@ -1,0 +1,20 @@
+{
+  "name": "sneakmax",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node database/index.js",
+    "sass-watch": "sass --watch ."
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "sass": "^1.89.0"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
+  }
+}

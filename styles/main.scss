@@ -1,0 +1,20 @@
+@use "normalize";
+@use "fonts";
+@use "utils";
+@use "globals";
+@use "variables";
+
+@use "./helpers/index";
+@use "./helpers/functions";
+@use "./helpers/mixins";
+
+@use './blocks/header';
+@use './blocks/footer';
+@use './blocks/hero';
+@use './blocks/catalog';
+@use './blocks/about';
+@use './blocks/form';
+@use './blocks/team';
+@use './blocks/questions';
+@use './blocks/contacts';
+@use './blocks/end';
