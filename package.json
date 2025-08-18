@@ -3,14 +3,18 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node database/index.js",
-    "sass-watch": "sass --watch ."
+    "start": "node server/database/index.js",
+    "dev": "nodemon server/database/index.js",
+    "sass-watch": "sass --watch .",
+    "watch": "run-p dev sass-watch"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/pg": "^8.15.5",
     "nodemon": "^3.1.10",
+    "npm-run-all": "^4.1.5",
     "sass": "^1.89.0"
   },
   "dependencies": {

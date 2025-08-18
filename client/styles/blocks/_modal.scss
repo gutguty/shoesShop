@@ -1,0 +1,239 @@
+@use '../helpers' as *;
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  &.active {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  &__overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &__content {
+    position: relative;
+    background-color: var(--color-white);
+    padding: rem(40);
+    width: 90%;
+    max-width: rem(1200);
+    max-height: 90vh;
+    z-index: 2;
+    overflow-y: auto;
+    border-radius: rem(8);
+
+    color: var(--color-black);
+
+    * {
+      color: var(--color-black);
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: rem(15);
+    right: rem(15);
+    font-size: rem(24);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-black);
+    z-index: 3;
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &__body {
+    display: grid;
+    grid-template-columns: 1fr 1fr; // Две равные колонки
+    gap: rem(30);
+    margin-bottom: rem(30);
+
+    &-left {
+      display: flex;
+      flex-direction: column;
+
+      img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        margin-bottom: rem(20);
+      }
+
+      h3 {
+        margin-bottom: rem(15);
+        font-size: rem(18);
+        font-weight: 600;
+      }
+
+      &-description {
+        line-height: 1.6;
+      }
+    }
+
+    &-right {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-pretitle {
+      display: flex;
+      gap: rem(20);
+      margin-bottom: rem(15);
+    }
+    &-article {
+      color: var(--color-light-gray);
+    }
+
+    &-quantity {
+      color: var(--color-light-gray);
+    }
+
+    &-title {
+      font-size: rem(24);
+      font-weight: 700;
+      margin-block: rem(20)
+    }
+
+    &-table {
+      margin-bottom: rem(25);
+
+      &-grid {
+        display: flex;
+        gap: rem(10);
+        flex-wrap: wrap;
+      }
+
+      &-size {
+        // Размеры и форма
+        width: rem(60);
+        height: rem(40);
+        padding: 0; // Убираем padding, используем размеры
+        border-radius: rem(4);
+        border: 1px solid var(--color-light-orange);
+
+        // Центрирование текста
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+
+        // Стили текста
+        font-size: rem(14);
+        font-weight: 500;
+        color: var(--color-black);
+
+        // Интерактивность
+        cursor: pointer;
+        transition: all 0.3s ease;
+        user-select: none; // Запрещаем выделение текста
+
+        &:hover {
+          background-color: var(--color-hover-red);
+          color: white; // Белый текст при hover
+          border-color: var(--color-hover-red);
+        }
+
+        &:focus-visible {
+          background-color: var(--color-hover-red);
+          color: white;
+          border-color: var(--color-hover-red);
+          outline: 2px solid var(--color-hover-red);
+          outline-offset: 2px;
+        }
+
+        // Активное состояние (выбранный размер)
+        &.active,
+        &.selected {
+          background-color: var(--color-hover-red);
+          color: white;
+          border-color: var(--color-hover-red);
+        }
+      }
+    }
+
+      &-subtitle {
+        margin-bottom: rem(15);
+        font-weight: 600;
+      }
+
+      &-price {
+        font-size: rem(28);
+        font-weight: 700;
+        margin-bottom: fluid(80,40);
+      }
+
+      &-button {
+        margin-bottom: rem(30);
+        width: 100%;
+        color: var(--color-white);
+        &:focus-visible {
+          background-color: var(--color-hover-red);
+        }
+        &:hover {
+          background-color: var(--color-hover-red);
+        }
+      }
+
+      &-titleCharacteristic {
+        margin-bottom: rem(15);
+        font-size: rem(18);
+        font-weight: 600;
+      }
+
+      &-characteristic {
+        ul {
+          list-style: none;
+          padding: 0;
+        }
+
+        li {
+          padding: rem(8) 0;
+          border-bottom: 1px solid #eee;
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+      }
+      &-video {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: center;
+
+        iframe {
+          width: 100%;
+          max-width: rem(560);
+          height: rem(315);
+        }
+      }
+    }
+  }
+
+
+html.modal-open {
+  overflow: hidden !important;
+  height: 100% !important;
+}
+
+body.modal-open {
+  overflow: hidden !important;
+  height: 100% !important;
+  position: relative;
+}

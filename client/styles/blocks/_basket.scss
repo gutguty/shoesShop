@@ -1,0 +1,149 @@
+@use '../helpers' as *;
+
+.basket-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  display: flex;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  visibility: hidden;
+  opacity: 0;
+  &.active {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.basket {
+  position: absolute;
+  height: auto;
+  max-height: rem(400);
+  min-height: rem(200);
+  padding: rem(20);
+  background-color: var(--color-white);
+  width: rem(400);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  
+
+  * {
+    color: var(--color-black);
+  }
+
+  &__items {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: rem(5);
+    margin-right: rem(-5);
+
+    &::-webkit-scrollbar {
+      width: rem(4);
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-light-gray);
+      border-radius: rem(2);
+    }
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: rem(15);
+    padding: rem(10) 0;
+    border-bottom: 1px solid var(--color-light-gray);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &-image {
+      width: rem(60);
+      height: rem(60);
+      object-fit: cover;
+      border-radius: rem(4);
+      flex-shrink: 0;
+    }
+
+    &-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: rem(8);
+      min-width: 0;
+    }
+
+    &-title {
+      font-size: rem(14);
+      font-weight: 400;
+      line-height: 1.3;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    &-price {
+      font-size: rem(18);
+      font-weight: 700;
+      color: var(--color-primary, #000);
+    }
+
+    &-remove {
+      display: flex;
+      border: none;
+      background: none;
+      align-items: center;
+      justify-content: center;
+      width: rem(30);
+      height: rem(30);
+      flex-shrink: 0;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--color-light-gray);
+        border-radius: 50%;
+      }
+    }
+  }
+
+  &__footer {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    padding-top: rem(20);
+    background-color: var(--color-white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: rem(2) solid var(--color-light-gray);
+    flex-shrink: 0;
+  }
+
+  &__total {
+    display: flex;
+    flex-direction: column;
+    gap: rem(5);
+
+    &-price {
+      font-weight: 700;
+    }
+  }
+
+  &__order-button {
+    color: var(--color-white);
+    &:focus-visible {
+      background-color: var(--color-hover-red);
+    }
+    &:hover {
+      background-color: var(--color-hover-red);
+    }
+  }
+}

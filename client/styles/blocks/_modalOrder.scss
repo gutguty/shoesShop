@@ -1,0 +1,148 @@
+@use '../helpers' as *;
+
+.modalOrder__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  &.active {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.modalOrder {
+  background-color: var(--color-white);
+  max-height: rem(700);
+  min-height: rem(400);
+  max-width: rem(470);
+  padding: rem(20);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  &__titleInfo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  &__title {
+    font-weight: 600;
+  }
+
+  &__numberOrder {
+    color: var(--color-gray);
+  }
+
+  &__main {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__totalPrice {
+    display: flex;
+    gap: rem(10);
+    color: var(--color-black);
+    margin-bottom: rem(10);
+  }
+
+  &__total {
+    &-title {
+      color: var(--color-gray);
+    }
+  }
+
+  &__countOrder {
+    display: flex;
+    margin-block: rem(10);
+    gap: rem(10);
+    color: var(--color-black);
+  }
+
+  &__count {
+    font-weight: 700;
+    &-title {
+      color: var(--color-gray);
+    }
+  }
+
+  &__items {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: rem(5);
+    margin-right: rem(-5);
+
+    &::-webkit-scrollbar {
+      width: rem(4);
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--color-light-gray);
+      border-radius: rem(2);
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    min-height: fluid(250);
+    align-items: center;
+    justify-content: center;
+    gap: rem(10);
+    padding-block: rem(20);
+    flex-shrink: 0;
+  }
+
+  &__label {
+    width: 100%;
+  }
+
+  &__input {
+    height: fluid(63,48);
+    width: 100%;
+    color: var(--color-black);
+    border: none;
+    border-radius: rem(4);
+    background-color: var(--color-light-gray);
+    padding: rem(10);
+
+    &::placeholder {
+      color: var(--color-gray);
+      opacity: 1;
+    }
+  }
+
+  &__button {
+    flex-shrink: 0;
+
+    &:focus-visible {
+      background-color: var(--color-hover-red);
+    }
+    &:hover {
+      background-color: var(--color-hover-red);
+    }
+  }
+}
