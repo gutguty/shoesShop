@@ -1,13 +1,13 @@
-@use './helpers' as *;
+@use "./helpers" as *;
 
 html {
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: hidden scroll;
   scrollbar-width: thin;
 }
 
 body {
-  @include fluid-text(16,14);
+  @include fluid-text(16, 14);
+
   display: flex;
   flex-direction: column;
   font-family: var(--font-family-base);
@@ -19,36 +19,46 @@ main {
   flex-grow: 1;
 }
 
-
-
-h1, .h1,
-h2, .h2,
-h3, .h3,
-h4, .h4,
-h5, .h5,
-h6, .h6 {
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
   color: var(--color-black);
 }
 
-h2, .h2 {
+h2,
+.h2 {
   font-weight: 700;
 }
 
-h3, .h3,
-p, .p {
+h3,
+.h3,
+p,
+.p {
   font-weight: 300;
 }
 
-h1, .h1 {
-  @include fluid-text(36,20);
+h1,
+.h1 {
+  @include fluid-text(36, 20);
 }
 
-h2, .h2 {
-  @include fluid-text(30,18);
+h2,
+.h2 {
+  @include fluid-text(30, 18);
 }
 
-h3, .h3 {
-  @include fluid-text(24,16);
+h3,
+.h3 {
+  @include fluid-text(24, 16);
 }
 
 a,
@@ -67,7 +77,6 @@ a {
   @include hover {
     color: var(--color-red);
   }
-
 
   &[class] {
     text-decoration: none;
@@ -88,13 +97,10 @@ button {
     transition-duration: 0.3s;
   }
 
-
   &[class] {
     text-decoration: none;
   }
 }
-
-
 
 :focus-visible {
   color: var(--color-red);
@@ -107,7 +113,3 @@ textarea:focus,
 button:focus {
   outline: none;
 }
-
-
-
-

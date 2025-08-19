@@ -1,4 +1,4 @@
-@use '../helpers' as *;
+@use "../helpers" as *;
 
 .basket-overlay {
   position: fixed;
@@ -8,9 +8,12 @@
   height: 100%;
   z-index: 1000;
   display: flex;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
   visibility: hidden;
   opacity: 0;
+
   &.active {
     visibility: visible;
     opacity: 1;
@@ -28,7 +31,6 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  
 
   * {
     color: var(--color-black);
@@ -36,8 +38,7 @@
 
   &__items {
     flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden auto;
     padding-right: rem(5);
     margin-right: rem(-5);
 
@@ -139,9 +140,11 @@
 
   &__order-button {
     color: var(--color-white);
+
     &:focus-visible {
       background-color: var(--color-hover-red);
     }
+
     &:hover {
       background-color: var(--color-hover-red);
     }

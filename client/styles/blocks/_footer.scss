@@ -1,13 +1,15 @@
-@use '../helpers' as *;
+@use "../helpers" as *;
 
 .footer {
   background-color: var(--color-green-blue);
+
   &__body {
     &-inner {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding-block: rem(28);
+
       @include mobile {
         flex-direction: column;
       }
@@ -18,8 +20,9 @@
     &-list {
       display: flex;
       align-items: center;
-      gap: fluid(40,12);
+      gap: fluid(40, 12);
       white-space: nowrap;
+
       @include mobile {
         flex-direction: column;
         margin-top: rem(14);
@@ -28,8 +31,6 @@
   }
 
   &__logo {
-    @include fluid-text(30,22);
-
+    @include fluid-text(30, 22);
   }
 }
-

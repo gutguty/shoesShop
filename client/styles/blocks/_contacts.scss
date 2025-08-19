@@ -2,20 +2,20 @@
 
 .contacts {
   background-color: var(--color-white-dark);
+
   a,
   span,
   div,
   h2,
-  input
-  {
+  input {
     color: var(--color-green-blue);
   }
 
   &__information {
     display: flex;
     gap: rem(140);
+    padding-block: fluid(80, 30) fluid(40, 30);
 
-    padding-block: fluid(80,30) fluid(40,30);
     @include laptop {
       gap: rem(50);
       flex-direction: column;
@@ -28,6 +28,7 @@
         text-align: center;
       }
     }
+
     &-office {
       display: flex;
       gap: rem(10);
@@ -46,24 +47,26 @@
       background-color: var(--color-white);
       text-align: center;
       border-radius: 50%;
-      box-shadow: 0 0 rem(8) rem(4) rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 rem(8) rem(4) rgb(0 0 0 / 10%);
 
       &::after {
         position: absolute;
         content: attr(data-tooltip);
-        width: fluid(426,256);
-        min-height: fluid(80,40);
+        width: fluid(426, 256);
+        min-height: fluid(80, 40);
         padding: rem(12) rem(16);
         line-height: 1.4;
         background-color: var(--color-white);
         border-radius: rem(4);
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.3s, visibility 0.3s;
+        transition:
+          opacity 0.3s,
+          visibility 0.3s;
         pointer-events: none;
         bottom: calc(100% + #{rem(10)});
         left: 10%;
-        box-shadow: 0 0 rem(8) rem(4) rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 rem(8) rem(4) rgb(0 0 0 / 10%);
         z-index: 10;
       }
 
@@ -77,7 +80,9 @@
         bottom: 70%;
         opacity: 0;
         visibility: hidden;
-        transition: opacity 0.3s, visibility 0.3s;
+        transition:
+          opacity 0.3s,
+          visibility 0.3s;
         z-index: 11;
       }
 
@@ -94,42 +99,46 @@
       display: flex;
       flex-direction: column;
       gap: rem(10);
-
       margin-block: rem(40);
-
     }
 
     &-phone {
-      @include fluid-text(30,24);
+      @include fluid-text(30, 24);
+
       max-width: rem(250);
       font-weight: 600;
     }
 
     &-direction {
-      @include fluid-text(18,16);
+      @include fluid-text(18, 16);
     }
+
     &-soc1alMedia {
       display: flex;
       gap: rem(20);
+
       @include laptop {
         align-items: center;
         justify-content: center;
       }
 
-
-      &-vk, &-instagram {
+      &-vk,
+      &-instagram {
         display: block;
         height: rem(44);
         width: rem(44);
         border-radius: 50%;
         text-align: center;
         background-color: var(--color-social);
+
         &:focus-visible {
           background-color: var(--color-hover-green-blue);
         }
+
         &:hover {
           background-color: var(--color-hover-green-blue);
         }
+
         &-link {
           display: inline-block;
           width: 100%;
@@ -141,16 +150,17 @@
 
       &-vk {
         &-link {
-          background-image: url(../../icons/social_vk.svg);
+          background-image: url("../../icons/social_vk.svg");
         }
       }
 
       &-instagram {
         &-link {
-          background-image: url(../../icons/social_instagram.svg);
+          background-image: url("../../icons/social_instagram.svg");
         }
       }
     }
+
     &-map {
       @include mobile {
         display: none;

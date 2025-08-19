@@ -41,21 +41,21 @@ $mobile: 769.98;
   }
 }
 
-//предотвратить залипание на тач скринах
-@mixin hover($hasActiveEffectOnMobile : true) {
-  @media(any-hover: hover) {
+// предотвратить залипание на тач скринах
+@mixin hover($hasActiveEffectOnMobile: true) {
+  @media (any-hover: hover) {
     &:hover {
       @content;
     }
   }
 
-  @if ($hasActiveEffectOnMobile) {
-  @media (any-hover: none) {
-    &:active {
-      @content;
+  @if $hasActiveEffectOnMobile {
+    @media (any-hover: none) {
+      &:active {
+        @content;
+      }
     }
   }
-}
 }
 
 @mixin visually-hidden {
@@ -71,8 +71,8 @@ $mobile: 769.98;
   overflow: hidden !important;
 }
 
-@mixin fluid-text($max:48,$min:16) {
-  font-size: fluid($max,$min);
+@mixin fluid-text($max: 48, $min: 16) {
+  font-size: fluid($max, $min);
 }
 
 @mixin hidden {

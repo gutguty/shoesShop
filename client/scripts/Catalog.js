@@ -1,162 +1,179 @@
-import {getBucketLocalStorage, setBucketLocalStorage, showErrorMessage} from "./utils.js";
-import {ERROR_SERVER,VISIBLE_CARDS,NO_PRODUCTS_IN_THIS_CATEGORY,PRODUCT_INFORMATION_NOT_FOUND} from "./constants.js";
+import {
+  getBucketLocalStorage,
+  setBucketLocalStorage,
+  showErrorMessage,
+} from "./utils.js"
+import {
+  ERROR_SERVER,
+  VISIBLE_CARDS,
+  NO_PRODUCTS_IN_THIS_CATEGORY,
+  PRODUCT_INFORMATION_NOT_FOUND,
+} from "./constants.js"
 
 class Catalog {
-    selectors = {
-        grid: '[data-js-catalog-grid]',
-        button: '[data-js-catalog-showMore]',
-        url: '/api'
-    }
+  selectors = {
+    grid: "[data-js-catalog-grid]",
+    button: "[data-js-catalog-showMore]",
+    url: "/api",
+  }
 
-    constructor() {
-        this.container = document.querySelector(this.selectors.grid);
-        this.buttonShowMore = document.querySelector(this.selectors.button);
-        this.urlApi = this.selectors.url;
-        this.products = [];
-        this.currentCards = VISIBLE_CARDS;
-        this.currentPage = 1;
-        this.modalBody = document.querySelector('[data-js-modal-body]')
-        this.getProducts();
-        this.init()
+  constructor() {
+    this.container = document.querySelector(this.selectors.grid)
+    this.buttonShowMore = document.querySelector(this.selectors.button)
+    this.urlApi = this.selectors.url
+    this.products = []
+    this.currentCards = VISIBLE_CARDS
+    this.currentPage = 1
+    this.modalBody = document.querySelector("[data-js-modal-body]")
+    this.getProducts()
+    this.init()
+  }
 
+  init() {
+    this.buttonShowMore.addEventListener("click", () => this.showMoreCards())
+    this.container.addEventListener("click", (event) => {
+      this.addToBucket(event)
+      this.showProductModal(event)
+    })
 
-    }
+    document.addEventListener("basketItemRemoved", () => {
+      const bucket = getBucketLocalStorage()
+      this.checkingActiveButtons(bucket)
+    })
 
-    init() {
-        this.buttonShowMore.addEventListener('click', () => this.showMoreCards())
-        this.container.addEventListener('click', (event) => {
-            this.addToBucket(event)
-            this.showProductModal(event)
+    document.querySelector(".hero-button").addEventListener("click", () => {
+      const catalog = document.getElementById("catalog")
+      if (catalog) {
+        catalog.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
         })
+      }
+    })
+  }
 
-        document.addEventListener('basketItemRemoved', (event) => {
-            const bucket = getBucketLocalStorage();
-            this.checkingActiveButtons(bucket);
-        });
+  showMoreCards() {
+    if (this.currentCards >= this.products.length) {
+      return
+    }
+    this.currentPage++
+    const newCurrentCards = this.currentCards * this.currentPage
 
-        document.querySelector(".hero-button").addEventListener('click', (event) => {
-            const catalog = document.getElementById('catalog');
-            if (catalog) {
-                catalog.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-        })
+    const productItem = this.products.slice(this.currentCards, newCurrentCards)
+    this.renderCard(productItem)
+
+    this.currentCards = this.container.children.length
+
+    if (this.currentCards >= this.products.length) {
+      this.buttonShowMore.classList.add("visually-hidden")
+    } else {
+      this.buttonShowMore.classList.remove("hidden")
+    }
+  }
+
+  addToBucket(event) {
+    event.preventDefault()
+    event.stopPropagation()
+    const targetButton = event.target.closest("[data-js-card-button-bucket]")
+    if (!targetButton) {
+      return
+    }
+    const card = targetButton.closest(".catalog__main-card")
+    const id = card.dataset.jsCardId
+
+    const bucket = getBucketLocalStorage()
+
+    if (bucket.includes(id)) {
+      return
     }
 
-    showMoreCards() {
-        if (this.currentCards >= this.products.length) {
-            return
-        }
-        this.currentPage++
-        const newCurrentCards = this.currentCards * this.currentPage
+    bucket.push(id)
+    setBucketLocalStorage(bucket)
+    this.checkingActiveButtons(bucket)
+    document.dispatchEvent(new CustomEvent("basketUpdated"))
+  }
 
-        const productItem = this.products.slice(this.currentCards,newCurrentCards)
-        this.renderCard(productItem)
+  addToBucketFromModal(event) {
+    event.preventDefault()
+    event.stopPropagation()
 
-        this.currentCards = this.container.children.length
-
-        if (this.currentCards >= this.products.length) {
-            this.buttonShowMore.classList.add('visually-hidden');
-        } else {
-            this.buttonShowMore.classList.remove('hidden');
-        }
+    const targetButton = event.target.closest("[data-js-modal-add-bucket]")
+    if (!targetButton) {
+      return
     }
 
-    addToBucket(event) {
-        event.preventDefault()
-        event.stopPropagation()
-        const targetButton = event.target.closest('[data-js-card-button-bucket]')
-        if (!targetButton) return
-        const card = targetButton.closest('.catalog__main-card')
-        const id = card.dataset.jsCardId
+    const productId = targetButton.dataset.productId
 
-        const bucket = getBucketLocalStorage()
+    const bucket = getBucketLocalStorage()
 
-        if (bucket.includes(id)) return
-
-        bucket.push(id)
-        setBucketLocalStorage(bucket)
-        this.checkingActiveButtons(bucket)
-        document.dispatchEvent(new CustomEvent('basketUpdated'));
+    if (bucket.includes(productId)) {
+      return
     }
 
-    addToBucketFromModal(event) {
-        event.preventDefault()
-        event.stopPropagation()
+    bucket.push(productId)
+    setBucketLocalStorage(bucket)
 
-        const targetButton = event.target.closest('[data-js-modal-add-bucket]')
-        if (!targetButton) return
+    this.checkingActiveButtons(bucket)
 
-        const productId = targetButton.dataset.productId
+    this.updateModalButton(targetButton, true)
 
-        const bucket = getBucketLocalStorage()
+    document.dispatchEvent(new CustomEvent("basketUpdated"))
+  }
 
-        if (bucket.includes(productId)) return
+  updateModalButton(button, inBucket) {
+    button.disabled = inBucket
+    if (inBucket) {
+      button.textContent = "В корзине"
+      button.classList.add("active")
+    } else {
+      button.textContent = "Заказать"
+      button.classList.remove("active")
+    }
+  }
 
-        bucket.push(productId)
-        setBucketLocalStorage(bucket)
+  checkingActiveButtons(bucket) {
+    const buttons = document.querySelectorAll("[data-js-card-button-bucket]")
+    buttons.forEach((button) => {
+      const card = button.closest(".catalog__main-card")
+      const id = card.dataset.jsCardId
+      const inBucket = bucket.includes(id)
 
-        this.checkingActiveButtons(bucket)
+      button.disabled = inBucket
+      button.classList.toggle("active", inBucket)
+    })
+  }
 
-        this.updateModalButton(targetButton, true)
-
-        document.dispatchEvent(new CustomEvent('basketUpdated'));
-
+  showProductModal(event) {
+    event.preventDefault()
+    const targetButton = event.target.closest("[data-js-card-button-look]")
+    if (!targetButton) {
+      return
+    }
+    const card = targetButton.closest(".catalog__main-card")
+    const id = Number(card.dataset.jsCardId)
+    const product = this.products.find((item) => item.id === id)
+    if (!product) {
+      showErrorMessage(PRODUCT_INFORMATION_NOT_FOUND)
+      return
     }
 
-    updateModalButton(button, inBucket) {
-        button.disabled = inBucket
-        if (inBucket) {
-            button.textContent = 'В корзине'
-            button.classList.add('active')
-        } else {
-            button.textContent = 'Заказать'
-            button.classList.remove('active')
-        }
-    }
+    this.renderModal(product)
+    this.showModal()
+  }
 
-    checkingActiveButtons(bucket) {
-        const buttons = document.querySelectorAll('[data-js-card-button-bucket]')
-        buttons.forEach(button => {
-            const card = button.closest('.catalog__main-card')
-            const id = card.dataset.jsCardId
-            const inBucket = bucket.includes(id)
+  renderModal(product) {
+    this.modalBody.innerHTML = ""
+    const { id, title, description, image, price, size, gender } = product
 
-            button.disabled = inBucket
-            button.classList.toggle('active',inBucket)
-        })
-    }
+    const bucket = getBucketLocalStorage()
+    const inBucket = bucket.includes(id.toString())
+    const buttonText = inBucket ? "В корзине" : "Заказать"
+    const buttonClass = inBucket
+      ? "modal__body-button button active"
+      : "modal__body-button button"
+    const buttonDisabled = inBucket ? "disabled" : ""
 
-    showProductModal(event) {
-        event.preventDefault()
-        const targetButton = event.target.closest('[data-js-card-button-look]')
-        if (!targetButton) return
-        const card = targetButton.closest('.catalog__main-card')
-        const id = Number(card.dataset.jsCardId)
-        const product = this.products.find(item => item.id === id)
-        if (!product) {
-            showErrorMessage(PRODUCT_INFORMATION_NOT_FOUND)
-            return
-        }
-
-        this.renderModal(product)
-        this.showModal()
-    }
-
-    renderModal(product) {
-        this.modalBody.innerHTML = '';
-        const {id,title,description,image,price,size,gender} = product;
-
-        const bucket = getBucketLocalStorage()
-        const inBucket = bucket.includes(id.toString())
-        const buttonText = inBucket ? 'В корзине' : 'Заказать'
-        const buttonClass = inBucket ? 'modal__body-button button active' : 'modal__body-button button'
-        const buttonDisabled = inBucket ? 'disabled' : ''
-
-        const productItem =
-            `
+    const productItem = `
                 <div class="modal__body-left">
                     <img src="../icons/${image}" alt="${title}" height="520" width="462">
                     <h3 class="modal__body-titleDescription">Описание</h3>
@@ -205,98 +222,96 @@ class Catalog {
                     <iframe width="560" height="315" src="https://www.youtube.com/embed/DS5VUoUO4f8?si=h426uavwH8Gx4lLE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                 </div>
             `
-        this.modalBody.innerHTML = productItem
-    }
+    this.modalBody.innerHTML = productItem
+  }
 
-    showModal() {
-        const modal = document.querySelector('[data-js-modal]')
-        if (modal) {
-            modal.classList.add('active')
-            this.addModalListeners();
+  showModal() {
+    const modal = document.querySelector("[data-js-modal]")
+    if (modal) {
+      modal.classList.add("active")
+      this.addModalListeners()
+    } else {
+      console.error("Modal element not found!")
+    }
+  }
+
+  addModalListeners() {
+    // Обработчик для закрытия модального окна
+    document.querySelectorAll("[data-js-modal-close]").forEach((button) => {
+      button.addEventListener("click", () => this.closeModal())
+    })
+
+    // Обработчик для кнопки "Заказать" в модальном окне
+    this.modalBody.addEventListener("click", (event) => {
+      this.addToBucketFromModal(event)
+    })
+
+    // Обработчик для клавиши Escape
+    document.addEventListener("keydown", this.handleEscapePress)
+  }
+
+  closeModal() {
+    document.documentElement.classList.remove("modal-open")
+    document.body.classList.remove("modal-open")
+    const modal = document.querySelector("[data-js-modal]")
+    if (modal) {
+      modal.classList.remove("active")
+      this.removeModalListeners()
+      this.modalBody.innerHTML = ""
+    }
+  }
+
+  removeModalListeners() {
+    document.removeEventListener("keydown", this.handleEscapePress)
+    // Удаляем обработчик клика с modalBody
+    this.modalBody.removeEventListener("click", this.addToBucketFromModal)
+  }
+
+  handleEscapePress = (e) => {
+    if (e.key === "Escape") {
+      this.closeModal()
+    }
+  }
+
+  async getProducts() {
+    try {
+      if (!this.products.length) {
+        const res = await fetch(`${this.urlApi}`)
+
+        if (!res.ok) {
+          throw new Error(res.statusText)
+        }
+
+        this.products = await res.json()
+
+        if (this.products.length > VISIBLE_CARDS) {
+          this.buttonShowMore.classList.remove("hidden")
         } else {
-            console.error('Modal element not found!')
-        }
-    }
-
-    addModalListeners(){
-        // Обработчик для закрытия модального окна
-        document.querySelectorAll('[data-js-modal-close]').forEach(button => {
-            button.addEventListener('click', (event) => this.closeModal())
-        })
-
-        // Обработчик для кнопки "Заказать" в модальном окне
-        this.modalBody.addEventListener('click', (event) => {
-            this.addToBucketFromModal(event)
-        })
-
-        // Обработчик для клавиши Escape
-        document.addEventListener('keydown', this.handleEscapePress);
-    }
-
-    closeModal(){
-        document.documentElement.classList.remove('modal-open');
-        document.body.classList.remove('modal-open');
-        const modal = document.querySelector('[data-js-modal]')
-        if (modal) {
-            modal.classList.remove('active')
-            this.removeModalListeners()
-            this.modalBody.innerHTML = ''
-        }
-    }
-
-    removeModalListeners() {
-        document.removeEventListener('keydown', this.handleEscapePress);
-        // Удаляем обработчик клика с modalBody
-        this.modalBody.removeEventListener('click', this.addToBucketFromModal);
-    }
-
-    handleEscapePress = (e) => {
-        if (e.key === 'Escape') {
-            this.closeModal();
-        }
-    }
-
-    async getProducts() {
-        try {
-            if (!this.products.length) {
-                const res = await fetch(`${this.urlApi}`);
-
-                if (!res.ok) {
-                    throw new Error(res.statusText);
-                }
-
-                this.products = await res.json();
-
-                if (this.products.length > VISIBLE_CARDS) {
-                    this.buttonShowMore.classList.remove('hidden');
-                } else {
-                    this.buttonShowMore.classList.add('hidden');
-                }
-
-                this.renderProducts(this.products);
-            }
-
-        } catch(err) {
-            showErrorMessage(ERROR_SERVER);
-            console.log(err.message);
-        }
-    }
-
-    renderProducts(data) {
-        if (!data || !data.length) {
-            showErrorMessage(NO_PRODUCTS_IN_THIS_CATEGORY)
-            return
+          this.buttonShowMore.classList.add("hidden")
         }
 
-        const arrCards = data.slice(0,VISIBLE_CARDS);
-        this.renderCard(arrCards);
+        this.renderProducts(this.products)
+      }
+    } catch (err) {
+      showErrorMessage(ERROR_SERVER)
+      console.log(err.message)
+    }
+  }
+
+  renderProducts(data) {
+    if (!data || !data.length) {
+      showErrorMessage(NO_PRODUCTS_IN_THIS_CATEGORY)
+      return
     }
 
-    renderCard(data) {
-        data.forEach((card) => {
-            const {id,title,image,price} = card;
-            const cardItem =
-                `
+    const arrCards = data.slice(0, VISIBLE_CARDS)
+    this.renderCard(arrCards)
+  }
+
+  renderCard(data) {
+    data.forEach((card) => {
+      const { id, title, image, price } = card
+      const cardItem = `
                     <div class="catalog__main-card" data-js-card-id="${id}">
                         <a href="/" class="catalog__main-image">
                             <img src="../icons/${image}" alt="${title}" height="293" width="280">
@@ -320,9 +335,9 @@ class Catalog {
                         </a>
                     </div>
                 `
-            this.container.insertAdjacentHTML('beforeend', cardItem);
-        })
-    }
+      this.container.insertAdjacentHTML("beforeend", cardItem)
+    })
+  }
 }
 
 export default Catalog

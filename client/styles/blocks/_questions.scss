@@ -4,7 +4,7 @@
   background-color: var(--color-white);
 
   &__information {
-    padding-block: fluid(60,30);
+    padding-block: fluid(60, 30);
 
     &-header {
       margin-bottom: rem(40);
@@ -17,7 +17,7 @@
 
     &-accordion {
       border-bottom: rem(1) solid var(--color-black);
-      padding: rem(20) rem(20);
+      padding: rem(20);
       transition: all 0.3s ease;
 
       &:first-child {
@@ -39,7 +39,6 @@
 
       &-title {
         font-weight: 500;
-
       }
 
       &-indicator {
@@ -50,7 +49,7 @@
 
         &::before,
         &::after {
-          content: '';
+          content: "";
           position: absolute;
           background-color: var(--color-black);
           top: 50%;

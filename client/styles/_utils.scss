@@ -1,8 +1,8 @@
-@use 'helpers' as *;
-
+@use "helpers" as *;
 
 .container {
   @include adaptive-container(1200px, 20px);
+
   margin-inline: auto;
 }
 
@@ -49,20 +49,20 @@
   border-radius: rem(4);
   white-space: nowrap;
   border: transparent;
-  width: fluid(256,180);
-  height: fluid(63,48);
+  width: fluid(256, 180);
+  height: fluid(63, 48);
 }
 
 .noSelect {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+  user-select: none;
+  user-select: none;
+  user-select: none;
+  user-select: none;
   user-select: none;
 }
+
 .noSelect:focus {
   outline: none !important;
 }
-

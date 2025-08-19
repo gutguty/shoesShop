@@ -1,27 +1,24 @@
-@use 'helpers' as *;
+@use "helpers" as *;
 
 :root {
   --container-width: #{rem(1180)};
   --container-padding-x: #{rem(20)};
-  --font-family-base: 'ABeeZee', sans-serif;
-  --font-family-second: 'Intro', sans-serif;
-  --color-black: #000000;
-  --color-white: #ffffff;
+  --font-family-base: "ABeeZee", sans-serif;
+  --font-family-second: "Intro", sans-serif;
+  --color-black: #000;
+  --color-white: #fff;
   --color-purple: #484283;
-  --color-red: #F14F4F;
+  --color-red: #f14f4f;
   --color-hover-red: #e30a0a;
-  --color-green-blue: #444B58;
+  --color-green-blue: #444b58;
   --color-hover-green-blue: #353942;
-  --color-light-orange: #DBBBA9;
-  --color-pale: #FFF4EE;
-  --color-gray: #B2B5BB;
+  --color-light-orange: #dbbba9;
+  --color-pale: #fff4ee;
+  --color-gray: #b2b5bb;
   --color-light-gray: #ededed;
   --color-gray-dark: #808080;
-  --color-white-dark: #F3F6F6;
+  --color-white-dark: #f3f6f6;
   --border: #{rem(1)} solid var(--color-white);
-  --color-social: #0E5A4C;
-
+  --color-social: #0e5a4c;
   --transition-duration: 0.2s;
-
-
 }

@@ -1,149 +1,154 @@
-import {showErrorMessage} from "./utils.js";
-import {ERROR_SERVER, NO_ITEMS_CART} from "./constants.js";
+import { showErrorMessage } from "./utils.js"
+import { ERROR_SERVER, NO_ITEMS_CART } from "./constants.js"
 
 class CatalogFilter {
-    constructor() {
-        this.overlayElement = document.querySelector('[data-js-catalog-overlay]')
-        this.mainButton = document.querySelector('[data-js-catalog-button]')
+  constructor() {
+    this.overlayElement = document.querySelector("[data-js-catalog-overlay]")
+    this.mainButton = document.querySelector("[data-js-catalog-button]")
 
-        this.acceptButton = document.querySelector('[data-js-filter-buttonAccept]')
-        this.resetButton = document.querySelector('[data-js-filter-buttonReset]')
+    this.acceptButton = document.querySelector("[data-js-filter-buttonAccept]")
+    this.resetButton = document.querySelector("[data-js-filter-buttonReset]")
 
-        this.sizeArray = Array.from(document.querySelectorAll('[data-js-filter-size]'))
+    this.sizeArray = Array.from(
+      document.querySelectorAll("[data-js-filter-size]"),
+    )
 
-        this.genderArray = Array.from(document.querySelectorAll('[data-js-filter-gender]'))
+    this.genderArray = Array.from(
+      document.querySelectorAll("[data-js-filter-gender]"),
+    )
 
-        this.priceMin = document.querySelector('[data-js-number-min]')
-        this.priceMax = document.querySelector('[data-js-number-max]')
+    this.priceMin = document.querySelector("[data-js-number-min]")
+    this.priceMax = document.querySelector("[data-js-number-max]")
 
-        this.priceMinRange = document.querySelector('[data-js-range-min]')
-        this.priceMaxRange = document.querySelector('[data-js-range-max]')
-        this.progressElement = document.querySelector('[data-js-progress]')
-        this.container = document.querySelector('[data-js-catalog-grid]')
+    this.priceMinRange = document.querySelector("[data-js-range-min]")
+    this.priceMaxRange = document.querySelector("[data-js-range-max]")
+    this.progressElement = document.querySelector("[data-js-progress]")
+    this.container = document.querySelector("[data-js-catalog-grid]")
 
-        this.showMoreButton = document.querySelector('[data-js-catalog-showMore]')
+    this.showMoreButton = document.querySelector("[data-js-catalog-showMore]")
 
+    this.products = []
+    this.urlApi = "/api"
 
-        this.products = []
-        this.urlApi = '/api'
-
-        this.currentFiltres = {
-            priceMin: null,
-            priceMax: null,
-            genders: [],
-            sizes: []
-        }
-
-        this.getProducts()
-        this.init()
+    this.currentFiltres = {
+      priceMin: null,
+      priceMax: null,
+      genders: [],
+      sizes: [],
     }
 
-    init() {
-        this.mainButton.addEventListener('click',() => this.clickOnFilter())
-        this.checkSizes(this.sizeArray)
+    this.getProducts()
+    this.init()
+  }
 
-        this.resetButton.addEventListener('click',() => this.clickOnReset())
-        this.acceptButton.addEventListener('click',() => this.filterData())
+  init() {
+    this.mainButton.addEventListener("click", () => this.clickOnFilter())
+    this.checkSizes(this.sizeArray)
+
+    this.resetButton.addEventListener("click", () => this.clickOnReset())
+    this.acceptButton.addEventListener("click", () => this.filterData())
+  }
+
+  clickOnReset() {
+    this.priceMin.value = "0"
+    this.priceMax.value = "25768"
+
+    this.priceMinRange.value = "0"
+    this.priceMaxRange.value = "25768"
+
+    this.genderArray.forEach((checkbox) => (checkbox.checked = false))
+    this.sizeArray.forEach((checkbox) => (checkbox.checked = false))
+
+    this.currentFiltres = {
+      priceMin: this.priceMin.value,
+      priceMax: this.priceMax.value,
+      genders: [],
+      sizes: [],
     }
 
-    clickOnReset() {
-        this.priceMin.value = '0'
-        this.priceMax.value = '25768'
+    this.sizeArray.forEach((size) => {
+      size.classList.remove("is-active")
+    })
 
-        this.priceMinRange.value = '0'
-        this.priceMaxRange.value = '25768'
+    this.progressElement.style.width = "100%"
+    this.progressElement.style.left = "0%"
+    this.showMoreButton.classList.remove("visually-hidden")
+    this.mainButton.classList.remove("is-active")
+    this.overlayElement.classList.remove("is-active")
 
-        this.genderArray.forEach(checkbox => checkbox.checked = false)
-        this.sizeArray.forEach(checkbox => checkbox.checked = false)
+    this.renderCards(this.products)
+  }
 
-        this.currentFiltres = {
-            priceMin: this.priceMin.value,
-            priceMax: this.priceMax.value,
-            genders: [],
-            sizes: []
+  filterData() {
+    this.currentFiltres.priceMin = this.priceMin.value
+    this.currentFiltres.priceMax = this.priceMax.value
+
+    this.currentFiltres.genders = this.genderCheck(this.genderArray)
+    if (this.currentFiltres.genders.length === 2) {
+      this.currentFiltres.genders = "unisex"
+    }
+
+    this.currentFiltres.sizes = this.correctSizes()
+
+    const filteredProducts = this.filterProducts(this.products)
+    this.renderCards(filteredProducts)
+    this.showMoreButton.classList.add("visually-hidden")
+    this.mainButton.classList.remove("is-active")
+    this.overlayElement.classList.remove("is-active")
+  }
+
+  filterProducts(products) {
+    return products.filter((product) => {
+      // 1. Фильтрация по цене
+      const productPrice = parseFloat(product.price)
+      const minPrice = parseFloat(this.currentFiltres.priceMin)
+      const maxPrice = parseFloat(this.currentFiltres.priceMax)
+
+      if (productPrice < minPrice || productPrice > maxPrice) {
+        return false
+      }
+
+      // 2. Фильтрация по полу
+      if (
+        this.currentFiltres.genders &&
+        this.currentFiltres.genders.length > 0
+      ) {
+        if (this.currentFiltres.genders !== "unisex") {
+          const productGender = product.gender || ""
+          if (!this.currentFiltres.genders.includes(productGender)) {
+            return false
+          }
         }
+      }
 
-        this.sizeArray.forEach((size) => {
-            size.classList.remove('is-active')
+      // 3. Фильтрация по размерам
+      if (this.currentFiltres.sizes && this.currentFiltres.sizes.length > 0) {
+        const productSize = product.size ? product.size.toString() : ""
+        //для случая если будет в карточке несколько размеров одной модели
+        const hasSize = this.currentFiltres.sizes.some((selectedSize) => {
+          return productSize.includes(selectedSize)
         })
 
-        this.progressElement.style.width = '100%'
-        this.progressElement.style.left = '0%'
-        this.showMoreButton.classList.remove('visually-hidden');
-        this.mainButton.classList.remove('is-active');
-        this.overlayElement.classList.remove('is-active');
-
-        this.renderCards(this.products);
-    }
-
-    filterData() {
-        this.currentFiltres.priceMin = this.priceMin.value
-        this.currentFiltres.priceMax = this.priceMax.value
-
-        this.currentFiltres.genders = this.genderCheck(this.genderArray)
-        if(this.currentFiltres.genders.length === 2) {
-            this.currentFiltres.genders = "unisex"
+        if (!hasSize) {
+          return false
         }
+      }
 
-        this.currentFiltres.sizes = this.correctSizes()
+      return true
+    })
+  }
 
-        const filteredProducts = this.filterProducts(this.products);
-        this.renderCards(filteredProducts);
-        this.showMoreButton.classList.add('visually-hidden');
-        this.mainButton.classList.remove('is-active');
-        this.overlayElement.classList.remove('is-active');
+  renderCards(data) {
+    this.container.innerHTML = ""
 
+    if (!data || data.length === 0) {
+      showErrorMessage(NO_ITEMS_CART)
+      return
     }
 
-    filterProducts(products) {
-        return products.filter(product => {
-            // 1. Фильтрация по цене
-            const productPrice = parseFloat(product.price);
-            const minPrice = parseFloat(this.currentFiltres.priceMin);
-            const maxPrice = parseFloat(this.currentFiltres.priceMax);
-
-            if (productPrice < minPrice || productPrice > maxPrice) {
-                return false;
-            }
-
-            // 2. Фильтрация по полу
-            if (this.currentFiltres.genders && this.currentFiltres.genders.length > 0) {
-                if (this.currentFiltres.genders !== "unisex") {
-                    const productGender = product.gender || '';
-                    if (!this.currentFiltres.genders.includes(productGender)) {
-                        return false;
-                    }
-                }
-            }
-
-            // 3. Фильтрация по размерам
-            if (this.currentFiltres.sizes && this.currentFiltres.sizes.length > 0) {
-                const productSize = product.size ? product.size.toString() : '';
-                //для случая если будет в карточке несколько размеров одной модели
-                const hasSize = this.currentFiltres.sizes.some(selectedSize => {
-                    return productSize.includes(selectedSize);
-                });
-
-                if (!hasSize) {
-                    return false;
-                }
-            }
-
-            return true;
-        });
-    }
-
-    renderCards(data) {
-        this.container.innerHTML = '';
-
-        if (!data || data.length === 0) {
-            showErrorMessage(NO_ITEMS_CART);
-            return;
-        }
-
-        data.forEach(card => {
-            const {id, title, image, price} = card;
-            const cardItem = `
+    data.forEach((card) => {
+      const { id, title, image, price } = card
+      const cardItem = `
                 <div class="catalog__main-card" data-js-card-id="${id}">
                     <a href="/" class="catalog__main-image">
                         <img src="../icons/${image}" alt="${title}" height="293" width="280">
@@ -166,50 +171,50 @@ class CatalogFilter {
                         <span class="catalog__main-price">${price} ₽</span>
                     </a>
                 </div>
-            `;
-            this.container.insertAdjacentHTML('beforeend', cardItem);
-        });
-    }
+            `
+      this.container.insertAdjacentHTML("beforeend", cardItem)
+    })
+  }
 
-    correctSizes() {
-        return this.sizeArray
-            .filter(element => element.classList.contains('is-active'))
-            .map(element => element.textContent.trim())
-    }
+  correctSizes() {
+    return this.sizeArray
+      .filter((element) => element.classList.contains("is-active"))
+      .map((element) => element.textContent.trim())
+  }
 
-    genderCheck(data) {
-        return data
-            .filter(checkbox => checkbox.checked)
-            .map(checkbox => checkbox.value)
-    }
+  genderCheck(data) {
+    return data
+      .filter((checkbox) => checkbox.checked)
+      .map((checkbox) => checkbox.value)
+  }
 
-    async getProducts() {
-        try {
-            const res = await fetch(`${this.urlApi}`)
-            if (!res.ok) {throw new Error(res.statusText);}
+  async getProducts() {
+    try {
+      const res = await fetch(`${this.urlApi}`)
+      if (!res.ok) {
+        throw new Error(res.statusText)
+      }
 
-            this.products = await res.json()
-        }
-        catch(e) {
-            showErrorMessage(ERROR_SERVER)
-            console.log(e)
-        }
+      this.products = await res.json()
+    } catch (e) {
+      showErrorMessage(ERROR_SERVER)
+      console.log(e)
     }
+  }
 
-    checkSizes(data) {
-        data.forEach((item) => {
-            item.addEventListener('click',() => {
-                item.classList.toggle('is-active')
-            })
-        })
-    }
+  checkSizes(data) {
+    data.forEach((item) => {
+      item.addEventListener("click", () => {
+        item.classList.toggle("is-active")
+      })
+    })
+  }
 
-    clickOnFilter() {
-        this.mainButton.classList.toggle('is-active')
-        document.body.classList.toggle('is-lock');
-        this.overlayElement.classList.toggle('is-active')
-    }
+  clickOnFilter() {
+    this.mainButton.classList.toggle("is-active")
+    document.body.classList.toggle("is-lock")
+    this.overlayElement.classList.toggle("is-active")
+  }
 }
 
 export default CatalogFilter
-

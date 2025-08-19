@@ -1,26 +1,31 @@
-@use '../helpers' as *;
+@use "../helpers" as *;
 
 .form {
-
   a,
   div,
   h3,
   h1,
-  input
-  {
+  input {
     color: var(--color-green-blue);
   }
 
   background-color: var(--color-white);
+
   &__body {
-    padding-block: fluid(60,20);
+    padding-block: fluid(60, 20);
   }
 
   &__information {
-    &-step,&-step2,&-step3,&-step4 {
-      transition: opacity 0.3s ease, transform 0.3s ease;
+    &-step,
+    &-step2,
+    &-step3,
+    &-step4 {
+      transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
+
       &.active {
-        padding: fluid(40,20) fluid(100,50);
+        padding: fluid(40, 20) fluid(100, 50);
         background-color: var(--color-pale);
         transform: translateX(0);
         position: relative;
@@ -38,10 +43,12 @@
       }
     }
 
-
     &-title {
       font-weight: 500;
-      &-2,&-3,&-4 {
+
+      &-2,
+      &-3,
+      &-4 {
         font-weight: 600;
       }
     }
@@ -65,7 +72,7 @@
 
     &-grid {
       display: grid;
-      grid-template-columns: repeat(3,1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: rem(20);
 
       @include mobile {
@@ -75,7 +82,7 @@
 
     &-grid2 {
       display: flex;
-      gap: fluid(90,40);
+      gap: fluid(90, 40);
     }
 
     &-image2 {
@@ -83,24 +90,23 @@
     }
 
     &-details {
-      margin-bottom: fluid(122,62);
+      margin-bottom: fluid(122, 62);
+
       &-input {
-        width: fluid(465,250);
-        height: fluid(250,160);
+        width: fluid(465, 250);
+        height: fluid(250, 160);
         resize: none;
         color: var(--color-black);
         border: none;
         border-radius: rem(4);
-        padding :rem(20);
+        padding: rem(20);
         overflow: hidden;
 
         &::placeholder {
           color: var(--color-light-orange);
           opacity: 1;
         }
-
       }
-
     }
 
     &-name {
@@ -117,13 +123,13 @@
 
     &-name::before {
       cursor: pointer;
-      content: '';
+      content: "";
       display: inline-block;
       margin-right: rem(10);
       border: rem(1) solid var(--color-light-orange);
       border-radius: rem(4);
-      width: fluid(24,16);
-      height: fluid(24,16);
+      width: fluid(24, 16);
+      height: fluid(24, 16);
       vertical-align: middle;
     }
 
@@ -135,7 +141,7 @@
     }
 
     .form__information-checkbox:checked + .form__information-name::before {
-      background-image: url(../../icons/check_mark.svg);
+      background-image: url("../../icons/check_mark.svg");
       background-repeat: no-repeat;
       background-position: center;
       background-size: rem(15);
@@ -144,7 +150,9 @@
     .form__information-checkbox:focus + .form__information-name::before {
       box-shadow: 0 0 0 rem(2) var(--color-red);
     }
-    .form__information-checkbox:focus:not(:focus-visible) + .form__information-name::before {
+
+    .form__information-checkbox:focus:not(:focus-visible)
+      + .form__information-name::before {
       box-shadow: none;
     }
 
@@ -154,7 +162,6 @@
       align-items: center;
       padding-top: rem(20);
       border-top: 1px solid var(--color-gray-dark);
-
 
       @include mobile {
         flex-direction: column;
@@ -170,18 +177,15 @@
       }
     }
 
-
-
     &-form {
       position: relative;
       display: flex;
       flex-direction: column;
       background-color: var(--color-light-orange);
-      width: fluid(655,400);
-      height: fluid(400,300);
-      margin-block: rem(20) fluid(60,20);
-      padding: fluid(40,20);
-
+      width: fluid(655, 400);
+      height: fluid(400, 300);
+      margin-block: rem(20) fluid(60, 20);
+      padding: fluid(40, 20);
 
       &-title {
         color: var(--color-white);
@@ -189,12 +193,13 @@
 
       &-subtitle {
         color: var(--color-white);
-        margin-block: rem(10) fluid(25,15);
+        margin-block: rem(10) fluid(25, 15);
       }
 
-      &-name,&-mail {
-        width: fluid(500,350);
-        height: fluid(60,40);
+      &-name,
+      &-mail {
+        width: fluid(500, 350);
+        height: fluid(60, 40);
         border: none;
         border-radius: rem(4);
         margin-bottom: rem(10);
@@ -204,7 +209,7 @@
 
       &-button {
         margin-top: rem(10);
-        width: fluid(220,150);
+        width: fluid(220, 150);
 
         &.disabled {
           opacity: 0.6;
@@ -215,15 +220,19 @@
         &:focus-visible {
           background-color: var(--color-hover-red);
         }
+
         &:hover {
           background-color: var(--color-hover-red);
         }
       }
+
       &-images {
         $mobile-more: 910.98;
+
         position: relative;
         width: rem(211);
         height: rem(419);
+
         @media (width <= rem($mobile-more)) {
           display: none;
           opacity: 0;
@@ -250,7 +259,6 @@
           display: block;
           opacity: 1;
         }
-
       }
 
       &-image2 {
@@ -263,6 +271,7 @@
         z-index: 3;
       }
     }
+
     &-main {
       display: flex;
       position: relative;

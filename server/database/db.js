@@ -10,20 +10,18 @@
 //Без пула: Каждый запрос = новое соединение = медленно + может сломать сервер
 //С пулом: Переиспользуем готовые соединения = быстро + стабильно + эффективно
 
-
-const { Pool } = require('pg');
+const { Pool } = require("pg")
 /**
  * @type {import('pg').Pool}
  */
 
 const pool = new Pool({
-    user: "postgres",
-    password: "admin",
-    host: "localhost",
-    port: 5432,
-    database: "sneakmax"
-});
-
+  user: "postgres",
+  password: "admin",
+  host: "localhost",
+  port: 5432,
+  database: "sneakmax",
+})
 
 // Создаем pool один раз в отдельном файле, а используем во многих местах.
 module.exports = pool

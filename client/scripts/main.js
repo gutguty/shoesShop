@@ -4,7 +4,7 @@ import CatalogFilter from "./CatalogFilter.js"
 import Form from "./Form.js"
 import Catalog from "./Catalog.js"
 import BasketSystem from "./BasketSystem.js"
-import ModalOrder from "./ModalOrder.js";
+import ModalOrder from "./ModalOrder.js"
 
 new Header()
 new Slider()

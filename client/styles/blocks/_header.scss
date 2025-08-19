@@ -1,4 +1,4 @@
-@use '../helpers' as *;
+@use "../helpers" as *;
 
 html {
   &.is-lock {
@@ -15,6 +15,7 @@ html {
   position: sticky;
   top: 0;
   z-index: 100;
+
   &__body {
     &-inner {
       display: flex;
@@ -25,18 +26,17 @@ html {
     }
 
     &-inner::before {
-      content: '';
+      content: "";
       height: rem(1);
       position: absolute;
       width: calc(100% - var(--container-padding-x) * 2);
       background-color: var(--color-white);
       bottom: 0;
     }
-
   }
 
   &__logo {
-    @include fluid-text(30,22);
+    @include fluid-text(30, 22);
   }
 
   &__overlay {
@@ -49,6 +49,7 @@ html {
       background-color: var(--color-purple);
       transform: translateX(-100%);
       transition-duration: 0.3s;
+
       &.is-active {
         transform: translateX(0);
         transition-duration: 0.2s;
@@ -58,6 +59,7 @@ html {
 
   &__menu {
     height: 100%;
+
     &-list {
       display: flex;
       align-items: center;
@@ -70,6 +72,7 @@ html {
         row-gap: 1rem;
         padding: rem(40) rem(20);
         white-space: normal;
+
         @include mobile {
           display: flex;
           align-items: center;
@@ -80,10 +83,12 @@ html {
       }
     }
   }
+
   &__icon-overlay {
     display: flex;
     align-items: center;
     justify-content: center;
+
     &:hover {
       transition: 0.3s all;
       color: var(--color-white);
@@ -92,10 +97,11 @@ html {
     img {
       display: block;
     }
+
     &-bucket {
       position: relative;
-
     }
+
     &-count {
       position: absolute;
       top: 100%;
@@ -122,7 +128,6 @@ html {
     }
   }
 
-
   &__right {
     @include laptop {
       display: flex;
@@ -134,6 +139,7 @@ html {
 
 .burger-button {
   @include square(rem(40));
+
   display: inline-flex;
   flex-direction: column;
   justify-content: space-between;
@@ -152,20 +158,23 @@ html {
         transform-origin: 0 0;
         rotate: 45deg;
       }
+
       &:nth-child(2) {
         transform: scale(0);
       }
+
       &:last-child {
         transform-origin: 0 100%;
         rotate: -45deg;
       }
     }
   }
+
   &__line {
-    content: '';
+    content: "";
     height: rem(3);
     width: 100%;
-    background-color: currentColor;
+    background-color: currentcolor;
     border-radius: 1rem;
     transition: 0.5s;
   }
