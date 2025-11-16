@@ -15,9 +15,11 @@ HTML, CSS, SCSS, JavaScript, NodeJSl, PostgreSQL
 
 > ## Установка зависимостей
 
-- cd clone https://github.com/gutguty/shoesShop.git
-- npm start
+```bash
+cd clone https://github.com/gutguty/shoesShop.git
 
+npm start
+```
 > ## Скриншоты интерфейса
 
 ### Hero-секция (hero.png)  
