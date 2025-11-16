@@ -1,7 +1,6 @@
 //index.js - создание веб сервера (обрабатывает http запросы, отвечает пользователям)
 // Express - Фреймворк для Node.js с готовыми инструментами для обработки HTTP запросов, упрощает создание серверной части
 // импорт библиотеки express. require - способ подключения модулей Node.js.
-console.log("✅ Сервер запущен!")
 //server
 const express = require("express")
 const path = require("path")

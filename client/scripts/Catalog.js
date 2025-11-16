@@ -18,44 +18,68 @@ class Catalog {
   }
 
   constructor() {
-    this.container = document.querySelector(this.selectors.grid)
-    this.buttonShowMore = document.querySelector(this.selectors.button)
+    this.container = null
+    this.buttonShowMore = null
     this.urlApi = this.selectors.url
     this.products = []
     this.currentCards = VISIBLE_CARDS
     this.currentPage = 1
-    this.modalBody = document.querySelector("[data-js-modal-body]")
-    this.getProducts()
+    this.modalBody = null
     this.init()
   }
 
   init() {
-    this.buttonShowMore.addEventListener("click", () => this.showMoreCards())
-    this.container.addEventListener("click", (event) => {
-      this.addToBucket(event)
-      this.showProductModal(event)
-    })
+    this.container = document.querySelector(this.selectors.grid)
+    this.buttonShowMore = document.querySelector(this.selectors.button)
+    this.modalBody = document.querySelector("[data-js-modal-body]")
+
+    if (!this.container) {
+      console.error('Catalog container not found')
+      return
+    }
+
+    this.getProducts()
+    this.addEventListeners()
+  }
+
+  addEventListeners() {
+    if (this.buttonShowMore) {
+      this.buttonShowMore.addEventListener("click", () => this.showMoreCards())
+    }
+
+    if (this.container) {
+      this.container.addEventListener("click", (event) => {
+        this.addToBucket(event)
+        this.showProductModal(event)
+      })
+    }
 
     document.addEventListener("basketItemRemoved", () => {
       const bucket = getBucketLocalStorage()
       this.checkingActiveButtons(bucket)
     })
 
-    document.querySelector(".hero-button").addEventListener("click", () => {
-      const catalog = document.getElementById("catalog")
-      if (catalog) {
-        catalog.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        })
-      }
-    })
+    const heroButton = document.querySelector(".hero-button")
+    if (heroButton) {
+      heroButton.addEventListener("click", () => {
+        const catalog = document.getElementById("catalog")
+        if (catalog) {
+          catalog.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          })
+        }
+      })
+    }
   }
 
   showMoreCards() {
+    if (!this.buttonShowMore || !this.container) return
+
     if (this.currentCards >= this.products.length) {
       return
     }
+
     this.currentPage++
     const newCurrentCards = this.currentCards * this.currentPage
 
@@ -162,6 +186,8 @@ class Catalog {
   }
 
   renderModal(product) {
+    if (!this.modalBody) return
+
     this.modalBody.innerHTML = ""
     const { id, title, description, image, price, size, gender } = product
 
@@ -236,17 +262,16 @@ class Catalog {
   }
 
   addModalListeners() {
-    // Обработчик для закрытия модального окна
     document.querySelectorAll("[data-js-modal-close]").forEach((button) => {
       button.addEventListener("click", () => this.closeModal())
     })
 
-    // Обработчик для кнопки "Заказать" в модальном окне
-    this.modalBody.addEventListener("click", (event) => {
-      this.addToBucketFromModal(event)
-    })
+    if (this.modalBody) {
+      this.modalBody.addEventListener("click", (event) => {
+        this.addToBucketFromModal(event)
+      })
+    }
 
-    // Обработчик для клавиши Escape
     document.addEventListener("keydown", this.handleEscapePress)
   }
 
@@ -257,14 +282,17 @@ class Catalog {
     if (modal) {
       modal.classList.remove("active")
       this.removeModalListeners()
-      this.modalBody.innerHTML = ""
+      if (this.modalBody) {
+        this.modalBody.innerHTML = ""
+      }
     }
   }
 
   removeModalListeners() {
     document.removeEventListener("keydown", this.handleEscapePress)
-    // Удаляем обработчик клика с modalBody
-    this.modalBody.removeEventListener("click", this.addToBucketFromModal)
+    if (this.modalBody) {
+      this.modalBody.removeEventListener("click", this.addToBucketFromModal)
+    }
   }
 
   handleEscapePress = (e) => {
@@ -284,10 +312,12 @@ class Catalog {
 
         this.products = await res.json()
 
-        if (this.products.length > VISIBLE_CARDS) {
-          this.buttonShowMore.classList.remove("hidden")
-        } else {
-          this.buttonShowMore.classList.add("hidden")
+        if (this.buttonShowMore) {
+          if (this.products.length > VISIBLE_CARDS) {
+            this.buttonShowMore.classList.remove("hidden")
+          } else {
+            this.buttonShowMore.classList.add("hidden")
+          }
         }
 
         this.renderProducts(this.products)
@@ -309,6 +339,8 @@ class Catalog {
   }
 
   renderCard(data) {
+    if (!this.container) return
+
     data.forEach((card) => {
       const { id, title, image, price } = card
       const cardItem = `
@@ -318,7 +350,7 @@ class Catalog {
                             <div class="catalog__main-overlay" data-js-card-overlay>
                                 <button class="catalog__main-overlay-button" type="button" aria-label="Взглянуть на товар" data-js-card-button-look>
                                     <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" class="catalog__main-overlay-svg-1">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.9518 15.0664C18.9518 17.2489 17.1818 19.0176 14.9993 19.0176C12.8168 19.0176 11.0481 17.2489 11.0481 15.0664C11.0481 12.8826 12.8168 11.1139 14.9993 11.1139C17.1818 11.1139 18.9518 12.8826 18.9518 15.0664Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M18.9518 15.0664C18.9518 17.2489 17.1818 19.0176 14.9993 19.0176C12.8168 19.0176 11.0481 15.0664 11.0481 15.0664C11.0481 12.8826 12.8168 11.1139 14.9993 11.1139C17.1818 11.1139 18.9518 12.8826 18.9518 15.0664Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                         <path fill-rule="evenodd" clip-rule="evenodd" d="M14.9975 24.1936C19.7575 24.1936 24.1112 20.7711 26.5625 15.0661C24.1112 9.3611 19.7575 5.9386 14.9975 5.9386H15.0025C10.2425 5.9386 5.88875 9.3611 3.4375 15.0661C5.88875 20.7711 10.2425 24.1936 15.0025 24.1936H14.9975Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 </button>
