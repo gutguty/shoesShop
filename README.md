@@ -18,7 +18,7 @@ HTML, CSS, SCSS, JavaScript, NodeJSl, PostgreSQL
 - cd clone https://github.com/gutguty/shoesShop.git
 - npm start
 
-## Скриншоты интерфейса
+> ## Скриншоты интерфейса
 
 ### Hero-секция (hero.png)  
 ![Hero](./screenshots/hero.png)
