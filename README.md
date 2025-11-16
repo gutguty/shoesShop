@@ -18,3 +18,20 @@ HTML, CSS, SCSS, JavaScript, NodeJSl, PostgreSQL
 - cd clone https://github.com/gutguty/shoesShop.git
 - npm install
 - npm start
+
+## Скриншоты интерфейса
+
+### Каталог товаров (catalog.png)
+![Каталог](./screenshots/catalog.png)
+
+### Hero-секция (hero.png)  
+![Hero](./screenshots/hero.png)
+
+### Корзина (basket.png)
+![Корзина](./screenshots/basket.png)
+
+### Модальное окно товара (modal.png)
+![Модальное окно](./screenshots/modal.png)
+
+### Форма заказа (order.png)
+![Форма заказа](./screenshots/order.png)
