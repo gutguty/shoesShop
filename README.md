@@ -16,7 +16,6 @@ HTML, CSS, SCSS, JavaScript, NodeJSl, PostgreSQL
 > ## Установка зависимостей
 
 - cd clone https://github.com/gutguty/shoesShop.git
-- npm install
 - npm start
 
 ## Скриншоты интерфейса
