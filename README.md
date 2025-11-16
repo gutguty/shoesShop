@@ -21,11 +21,11 @@ HTML, CSS, SCSS, JavaScript, NodeJSl, PostgreSQL
 
 ## Скриншоты интерфейса
 
-### Каталог товаров (catalog.png)
-![Каталог](./screenshots/catalog.png)
-
 ### Hero-секция (hero.png)  
 ![Hero](./screenshots/hero.png)
+
+### Каталог товаров (catalog.png)
+![Каталог](./screenshots/catalog.png)
 
 ### Корзина (basket.png)
 ![Корзина](./screenshots/basket.png)
